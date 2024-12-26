@@ -1,0 +1,30 @@
+{
+    "http_log": [
+        {
+            "severity": {
+                "enable": "true",
+                "origin_key": "test1.test2.test3"
+            }
+        },
+        {
+            "user_agent": {
+                "eanble": "false",
+                "origin_key": "http.request.user_agent"
+            }
+        },
+        {
+            "rule_map": {
+                "enable": "true",
+                "extra_params": [
+                    "rule_id",
+                    "rule_category",
+                    "severity_level",
+                    "state",
+                    "attack_content",
+                    "attack_place"
+                ],
+                "key_func": "generate_rule_category"
+            }
+        }
+    ]
+}

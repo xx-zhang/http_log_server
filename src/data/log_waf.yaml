@@ -1,0 +1,139 @@
+http_log:
+  - uuid:
+      origin_key: "request.headers.x-coraza-uuid"
+  - client_ip:
+      origin_key: "client_ip"
+  - upstream:
+      origin_key: "upstream"
+  - apisix_route_id:
+      origin_key: "route_id"
+  - http_method:
+      origin_key: "request.method"
+  - http_uri:
+      origin_key: request.uri
+  - http_url:
+      origin_key: request.url
+  - domain:
+      origin_key: server.hostname
+  - http_host:
+      origin_key: request.headers.host
+  - http_version:
+      # origin_key: ""
+      const_value: "HTTP/1.1"
+  - http_xff:
+      origin_key: request.headers.x-forwarded-for 
+  - http_referer:
+      origin_key: request.headers.referer
+  - http_cookie:
+      origin_key: request.headers.cookie
+  - http_query:
+      key_func: get_apisix_http_query_string
+  - http_request_body:
+      origin_key: request.body
+  - http_response_body:
+      origin_key: response.body  
+  - http_user_agent:
+      origin_key: request.headers.user-agent
+  - content_type:
+      origin_key: request.headers.content-type
+  - content_length:
+      origin_key: request.headers.content-length
+  - resp_content_length:
+      origin_key: response.headers.content-length
+  - resp_content_type:
+      origin_key: response.headers.content-type
+  - status:
+      origin_key: "response.status"
+  - sent_size:
+      orign_key: "request.size"
+  - recv_size:
+      origin_key: "response.size"
+  - upstream_status:
+      origin_key: "response.headers.x-apisix-upstream-status"
+  - passed_waf:
+      origin_key: "response.headers.x-apisix-to-waf"
+  - apisix_latency:
+      origin_key: "apisix_latency"
+  - latency:
+      origin_key: "latency"     
+  - upstream_latency:
+      origin_key: "upstream_latency"
+  - apisix_waf_error:
+      origin_key: "response.headers.x-apisix-to-waf-error"
+  - timestamp:
+      origin_key: "start_time"
+  - http_request_headers_raw:
+      key_func: generate_http_req_header_raw
+  - ipinfo_all_map:
+      enable: false
+      key_func: generate_ipcity_info 
+      func_args_metadata:
+        - ipcity_db_path: /root/test.db 
+      extra_params: 
+        - ipinfo_city
+        - ipinfo_country
+        - ipinfo_isp
+
+audit_log:
+  - uuid:
+      origin_key: "transaction.request.headers.x-coraza-uuid.0"
+  - timestamp:
+      origin_key: "transaction.timestamp"
+  - unix_timestamp:
+      origin_key: "transaction.unix_timestamp"
+  - http_version:
+      origin_key: "transaction.request.protocol"
+  - client_ip:
+      origin_key: "transaction.client_ip"
+  - client_port:
+      origin_key: "transaction.client_port"
+  - transaction_id:
+      origin_key: "transaction.id"
+  - http_request_uri:
+      origin_key: "transaction.request.uri"
+  - http_user_agent:
+      origin_key: "transaction.request.headers.user-agent.0"
+  - http_server:
+      origin_key: "transaction.server_id"
+  - http_host:
+      origin_key: "transaction.request.headers.host.0"
+  - http_request_body:
+      origin_key: "transaction.request.body"
+  - http_request_files:
+      origin_key: "transaction.request.files"
+  - http_request_raw:
+      key_func: gen_request_raw
+      extra_params: 
+        - http_request_raw   # 三选一
+        - http_request_headers # RECOMEND - 推荐
+        - http_request_log 
+  - content_length:
+      origin_key: "transaction.request.headers.content-length.0"
+  - content_length:
+      origin_key: "transaction.request.headers.content-length.0"
+  - http_method:
+      origin_key: "request.method"
+  - is_interrupted:
+      origin_key: "transaction.is_interrupted"
+  - rule_map:
+      key_func: generate_rule_category # 富华rule_id相关信息
+      extra_params: 
+        - rule_id
+        - rule_category 
+        - severity_level 
+        - state
+        - attack_content 
+        - attack_place 
+  - ipinfo_all_map:
+      enable: false
+      key_func: generate_ipcity_info 
+      func_args_metadata:
+        - ipcity_db_path: /root/test.db 
+      extra_params: 
+        - ipinfo_city
+        - ipinfo_country
+        - ipinfo_isp
+
+rule_category_map:
+  - 920:
+    category_name: "1111111"

@@ -1,0 +1,26 @@
+http_log:
+  - severity:
+      origin_key: test1.test2.test3
+      enable: true 
+  - user_agent:
+      origin_key: http.request.user_agent 
+      eanble: false 
+  - rule_map:
+      enable: true 
+      key_func: generate_rule_category # 富华
+      extra_params: 
+        - rule_id
+        - rule_category 
+        - severity_level 
+        - state
+        - attack_content 
+        - attack_place 
+  - ip_map:
+      enable: true
+      key_func: generate_ipcity_info 
+      func_args_metadata:
+        - ipcity_db_path: /root/test.db 
+      extra_params: 
+        - ipinfo_city
+        - ipinfo_country
+        - ipinfo_isp
