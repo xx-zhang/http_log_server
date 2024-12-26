@@ -1,17 +1,16 @@
+
+#ifndef CORAZA_LOG_HELPER_H
+#define CORAZA_LOG_HELPER_H
+
 #include <cerrno>
 #include <cstring>
-#include <fstream>
-#include "iostream"
 #include <map>
-#include <random>
 #include <string>
 #include <vector>
 
 #include "spdlog/spdlog.h"
 // #include "yaml-cpp/yaml.h"
-
 #include "utils/JsonUtils.h"
-#include "utils/YamlUtils.h"
 
 
 // 这个配置也可以写道yaml里面； 
@@ -79,7 +78,6 @@ inline void generate_rule_category(const nlohmann::json messages_data, nlohmann:
                     }   
                 }
             }
-
         }
 
         std::vector<std::string > key_vec = {"msg", "data", "id"};
@@ -135,6 +133,7 @@ inline nlohmann::json parse_log_standard(const nlohmann::json cfg_json, const nl
             if(x.contains("enable") && x["enable"].is_boolean() && x["enable"] == false){
                 continue;
             }
+
             if(x.contains("origin_key")){
                 try {
                     // TODO 这个值默认dump了两次不知道什么原因； 这里我们直接合一次。
@@ -144,6 +143,7 @@ inline nlohmann::json parse_log_standard(const nlohmann::json cfg_json, const nl
                 }
                 continue;
             }
+
             if(x.contains("const_value")){
                 new_map[_key] = x["const_value"]; 
                 continue;
@@ -189,4 +189,4 @@ inline nlohmann::json parse_log_standard(const nlohmann::json cfg_json, const nl
 }
 
 
-
+#endif

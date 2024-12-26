@@ -17,6 +17,7 @@
 // #include "workflow/HttpMessage.h"
 #include "spdlog/spdlog.h"
 
+#include "utils/YamlUtils.h"
 #include "utils/coraza_log_helper.h"
 
 // cmd: ./d.elf -log_server http://127.0.0.1:5080 
@@ -36,9 +37,6 @@ nlohmann::json log_cfg_json;
 nlohmann::json log_buffer = {}; // 实际上是一个array, 只是用 nlhanmman/json 包裹了
 std::mutex buffer_mutex;
 // std::string url_log_type; 
-
-const static bool program_terminate = true;
-// const static size_t max_per_send = 10;
 
 void http_callback(WFHttpTask *task) {
     protocol::HttpResponse *resp = task->get_resp();
@@ -61,8 +59,7 @@ void http_callback(WFHttpTask *task) {
 
 nlohmann::json parse_post_data_standard(nlohmann::json json_data, const std::string log_type)
 {
-    auto x = parse_log_standard(log_cfg_json, json_data, log_type); 
-    return x; 
+    return parse_log_standard(log_cfg_json, json_data, log_type);
 }
 
 void log_to_openobserve(const nlohmann::json log_buffer_data, const std::string log_type) {
@@ -134,7 +131,7 @@ void add_log_entry(const std::string log_entry, const std::string log_type) {
     
     }
 
-    if (log_buffer.size() >= FLAGS_max_per_send) {
+    if (int(log_buffer.size()) >= FLAGS_max_per_send) {
         log_aggregator(log_type);
     }
 }
@@ -159,9 +156,8 @@ void handle_query(WFHttpTask *server_task, const std::string log_prefix, const s
 void process(WFHttpTask *server_task) {
     protocol::HttpRequest *req = server_task->get_req();
     protocol::HttpResponse *resp = server_task->get_resp();
-    // protocol::HttpHeaderCursor cursor(req);
 
-    char buf[8192];
+    // char buf[8192];
     const auto request_url = req->get_request_uri();
 
     // TODO 除了我们约定的URL其他的都不准访问。
