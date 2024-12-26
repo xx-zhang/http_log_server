@@ -147,13 +147,13 @@ void handle_query(WFHttpTask *server_task, const std::string log_prefix, const s
     WFGoTask *go_task = WFTaskFactory::create_go_task("common", add_log_entry, post_data, log_type);
     go_task->start(); 
 
-    WFTimerTask *timer = WFTaskFactory::create_timer_task("test", 2, 0, [=](WFTimerTask *task) {
-        // spdlog::warn("timer callback, state = %d, error = %d.\n", task->get_state(), task->get_error());
-        log_aggregator(log_type);
-    });
-    // 这里串接http的任务； 如果任务怎么样就执行；
     // timertask后面执行相关的任务，如果条目达到就会进行操作；
-    timer->start();
+    WFGoTask *go_task2 = WFTaskFactory::create_go_task("log_aggregator_timer", log_aggregator, log_type);
+    WFTimerTask *timer = WFTaskFactory::create_timer_task("test", 2, 0, [=](WFTimerTask *task) {
+        series_of(task)->push_back(go_task2); 
+    });
+
+    timer->start(); 
 }
 
 void process(WFHttpTask *server_task) {
