@@ -81,3 +81,22 @@ https://github.com/clangd/clangd/releases/download/18.1.3/clangd-linux-18.1.3.zi
 ## lua devel 
 - 这里推荐使用 lua-devel 这样可以外挂脚本进行使用，而不是每次都需要重新编译我们的工具
     - [测试示例](./src/tests/lua_func_test.cc)
+
+
+## 附录帮助
+
+```bash
+
+
+docker run -itd --rm --name=logserver --net=host piper.tencentcloudcr.com/redau/apisix_logserver:v1.1 ./http_log_server -log_server http://127.0.0.1:5080 --log_cfg_path ./log_waf.yaml -log_auth "Basic cm9vdEBleGFtcGxlLmNvbTo2a2xNWW9zSVhwNHFsUUF4"
+
+docker run -d \
+      --restart=always \
+      --name oo \
+      -v $PWD/openobserve_data:/data \
+      -p 127.0.0.1:5080:5080 \
+      -e ZO_ROOT_USER_EMAIL="root@example.com" \
+      -e ZO_ROOT_USER_PASSWORD="password#123" \
+      public.ecr.aws/zinclabs/openobserve:latest
+
+```
